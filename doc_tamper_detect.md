@@ -11,6 +11,7 @@ F1 DocTamper ~0.74
 Bank doc friendly
 Best available model for bank documents. Source code + pretrained checkpoint publicly available. Uses OCR to focus on text regions — exactly right for financial docs.
 github.com/KAHIMWONG/ADCD-Net
+
 TOMM 2024 · Best Cross-Domain
 CAFTB-Net
 Song et al. · ACM TOMM 2024
@@ -21,6 +22,8 @@ Best cross-domain
 SegFormer-B5
 Best generalization across unseen document types. Critical for bank deployments where document templates vary. Available via ForensicHub benchmark suite.
 github.com/scu-zjz/ForensicHub
+
+
 Pattern Recognition 2024
 ASCFormer (RTM)
 Luo et al. · Pattern Recognition 2024 · github.com/DrLuo/RTM
@@ -31,6 +34,8 @@ Manual forgeries
 Pretrained available
 Best for receipt and invoice tampering specifically. RTM dataset contains real Photoshop forgeries — most realistic training data for bank document fraud.
 github.com/DrLuo/RTM
+
+
 CVPR 2023
 DTD (Document Tampering Detector)
 Qu et al. · CVPR 2023 · github.com/qcf-568/DocTamper
@@ -40,6 +45,8 @@ DocTamper F1 0.91
 170K training images
 Excellent if fine-tuned on your bank document type. Collapses out-of-domain (F1=0.045 on receipts). Must calibrate threshold. Large dataset for fine-tuning.
 github.com/qcf-568/DocTamper
+
+
 Tier 2 — General forensics models that surprisingly hold up on documents
 CVPR 2023 · Surprisingly strong
 TruFor
@@ -50,6 +57,7 @@ MixTamper F1 0.689
 FantasyID F1 0.296
 No doc training
 Strong generalist. Use as cross-validation layer alongside ADCD-Net. Particularly good for photographed/scanned documents with camera noise traces.
+
 IJCV 2022 · JPEG specialist
 CAT-Net
 Kwon et al. · IJCV 2022
@@ -58,6 +66,8 @@ Per DocForge-Bench and ForensicHub: "CAT-Net family achieves best average F1 on 
 Best JPEG docs
 Compression artifact
 Highly relevant for bank documents scanned and saved as JPEG. Run as a fast first-pass filter before ADCD-Net full localization.
+
+
 Tier 3 — Do NOT use these for bank documents
 Not suitable · Natural image only
 IML-ViT / EITLNet / HiFi-Net / IFDL-VLM
