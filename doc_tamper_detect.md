@@ -1,5 +1,74 @@
 This is a very rich, fresh set of findings — the most important one being the brand-new DOCFORGE-BENCH paper (arXiv:2603.01433, published March 2, 2026 — literally three weeks ago). This completely changes the answer. Let me now build the definitive, research-backed response.This is a fundamentally different answer than anything previously given to you — based on the freshest research available (the DOCFORGE-BENCH paper was published March 2, 2026, just three weeks ago).
 
+Tier 1 — Document-specific SOTA (designed for this exact problem)
+ICCV 2025 · Best Document SOTA
+ADCD-Net
+Wong et al. · ICCV 2025 · arXiv:2507.16397
+Adaptive DCT + RGB fusion with Hierarchical Content Disentanglement. Specifically designed to handle the text–background disparity that causes other models to fail on documents. Uses OCR character masks to guide detection to text regions. Pristine Background Prototype captures untampered noise patterns for contrastive reference.
+
+F1 DocTamper ~0.74
++20.79% vs SOTA
+Bank doc friendly
+Best available model for bank documents. Source code + pretrained checkpoint publicly available. Uses OCR to focus on text regions — exactly right for financial docs.
+github.com/KAHIMWONG/ADCD-Net
+TOMM 2024 · Best Cross-Domain
+CAFTB-Net
+Song et al. · ACM TOMM 2024
+Dual-branch: Spatial Information Extraction (SIE) + Noise Feature Extraction (NFE) branches fused via Cross-Attention Fusion Module. SegFormer-B5 backbone. Per DocForge-Bench, it is the only document-specific method that clearly outperforms both TruFor and CAT-Net on cross-domain F1 — the most important metric for generalization to unseen bank document types.
+
+Mean F1 0.34
+Best cross-domain
+SegFormer-B5
+Best generalization across unseen document types. Critical for bank deployments where document templates vary. Available via ForensicHub benchmark suite.
+github.com/scu-zjz/ForensicHub
+Pattern Recognition 2024
+ASCFormer (RTM)
+Luo et al. · Pattern Recognition 2024 · github.com/DrLuo/RTM
+Trained on 6,000 images manually tampered by professional editors using Photoshop — closest to real-world bank fraud attacks. Asymmetric Stream Contrastive Transformer with Consistency-aware Aggregation and Gated Cross Neighborhood-attention Fusion. Best document-specific F1 on T-SROIE (receipt dataset, F1=0.779).
+
+T-SROIE F1 0.779
+Manual forgeries
+Pretrained available
+Best for receipt and invoice tampering specifically. RTM dataset contains real Photoshop forgeries — most realistic training data for bank document fraud.
+github.com/DrLuo/RTM
+CVPR 2023
+DTD (Document Tampering Detector)
+Qu et al. · CVPR 2023 · github.com/qcf-568/DocTamper
+Frequency Perception Head (FPH) + Multi-view Iterative Decoder (MID). ConvNeXt+Swin-V2 dual-stream with JPEG DCT inputs. Introduced the DocTamper dataset (170K document images). Curriculum Learning for Tampering Detection (CLTD) training strategy improves robustness to JPEG compression. High in-domain F1 (0.91) but drops sharply out-of-domain.
+
+DocTamper F1 0.91
+170K training images
+Excellent if fine-tuned on your bank document type. Collapses out-of-domain (F1=0.045 on receipts). Must calibrate threshold. Large dataset for fine-tuning.
+github.com/qcf-568/DocTamper
+Tier 2 — General forensics models that surprisingly hold up on documents
+CVPR 2023 · Surprisingly strong
+TruFor
+Guillaro et al. · CVPR 2023
+Per DocForge-Bench, TruFor outperforms ALL document-specific methods on MixTamper (F1=0.689) and FantasyID (F1=0.296). Noiseprint++ camera fingerprint captures low-level noise inconsistencies that are domain-agnostic — works even when the model has never seen a bank document. The paradox: a photo-forensics model beats document-trained models in cross-domain scenarios.
+
+MixTamper F1 0.689
+FantasyID F1 0.296
+No doc training
+Strong generalist. Use as cross-validation layer alongside ADCD-Net. Particularly good for photographed/scanned documents with camera noise traces.
+IJCV 2022 · JPEG specialist
+CAT-Net
+Kwon et al. · IJCV 2022
+Per DocForge-Bench and ForensicHub: "CAT-Net family achieves best average F1 on document tasks" and "strong on JPEG-rich datasets." Bank documents scanned as JPEG frequently carry JPEG compression artifact mismatches where tampered text was pasted from a different source. CAT-Net was built to detect exactly this.
+
+Best JPEG docs
+Compression artifact
+Highly relevant for bank documents scanned and saved as JPEG. Run as a fast first-pass filter before ADCD-Net full localization.
+Tier 3 — Do NOT use these for bank documents
+Not suitable · Natural image only
+IML-ViT / EITLNet / HiFi-Net / IFDL-VLM
+AAAI 2024 / ICASSP 2024 / CVPR 2023 / arXiv 2025
+These were your original five candidates. DocForge-Bench tested IML-ViT directly on document datasets — it is included in the "7 general methods" comparison and performs poorly without calibration. None were trained on document data. Tampered text regions occupy only 0.27–4.17% of document pixels vs ~15–30% in natural images — making their detection threshold catastrophically wrong for documents.
+
+Natural images: 91.4% F1
+Documents: near-zero F1
+All five of your original candidates fail on bank documents out-of-the-box. Not recommended without significant fine-tuning and threshold recalibration on document-specific data.
+
+This is a fundamentally different answer than anything previously given to you — based on the freshest research available (the DOCFORGE-BENCH paper was published March 2, 2026, just three weeks ago).
 ---
 
 ## The single most important finding you need to know
