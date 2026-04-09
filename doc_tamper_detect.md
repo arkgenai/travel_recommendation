@@ -139,3 +139,38 @@ Step 5 — Human review with ADCD-Net mask
 | ReceiptForgery | Tampered receipts specifically | 218 images | Part of DocForge-Bench |
 | FantasyID | ID card manipulations | 2,773 test images | `deepid-iccv.github.io` |
 | FSTS-1.5k | 1,488 real-world tampered images from 5 forgery types | 1.5K | arXiv:2503.xxxxx |
+
+
+Scanned document
+       │
+       ▼
+┌─────────────────────┐
+│ Stage 1: ELA + SRM  │  Fast pre-screening — catches JPEG re-compression
+│ (CPU, < 100ms)      │  artifacts from copy-paste edits
+└────────┬────────────┘
+         │ suspicious? proceed
+         ▼
+┌─────────────────────┐
+│ Stage 2: OCR +      │  Extract all text fields → flag font
+│ Font consistency    │  inconsistencies, spacing anomalies,
+│ (Tesseract/PaddleOCR│  character-level irregularities
+└────────┬────────────┘
+         │ suspicious? proceed
+         ▼
+┌─────────────────────┐
+│ Stage 3: IML-ViT    │  Pixel-level localization mask — highlights
+│ (fine-tuned on docs)│  the exact region that was altered
+└────────┬────────────┘
+         │
+         ▼
+┌─────────────────────┐
+│ Stage 4: CSIAD      │  Cross-sample anomaly check — compares
+│ cross-sample check  │  against known authentic templates
+└─────────────────────┘
+         │
+         ▼
+    Final verdict + localization mask + confidence score
+
+
+Stage 1 catches coarse JPEG-artifact tampering. Stage 2 catches the most common bank document fraud (altered numbers, forged text). Stage 3 produces the pixel mask showing where the tampering is. Stage 4 is the highest-accuracy check — comparing structurally against clean reference documents of the same type.
+A hybrid approach combining automated tools and human reviewers is more effective in detecting fraud than relying solely on one method Mastercard — the final human review step remains important for borderline cases, and the localization mask from Stage 3 makes that human review dramatically faster by directing the analyst's attention directly to the suspect region.
